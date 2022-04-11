@@ -1,0 +1,3 @@
+Luetusta datasta ei vieläkään tehdä linkitettyä listaa vaan sitä käsitellään isona pointteri taulukkona.
+Ohjelma vuotaa muistia useista eri kohdista, esimerkiksi anlyysissä oleva pRiviData vuotaa joka riviltä muistia. Samoin kun analysoidaan monesti niin tLista:lta 
+jää vapauttamatta aiemmat analyysin tulokset.

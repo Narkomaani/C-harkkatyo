@@ -69,7 +69,11 @@ void lueTiedosto(char *sPtr[], char nimi[]) {
 
     // Tiedoston luku
     while (fgets(rivi, sizeof(rivi), tiedosto) != NULL) {
-        sPtr[i] = malloc(sizeof(rivi)+1);
+        if ( (sPtr[i] = malloc(sizeof(rivi)+1)) == NULL ) {
+            perror("Muistin varaus epäonnistui");
+            exit(0);
+        }
+        
         strcpy(sPtr[i], rivi);
         i++;
         
@@ -251,6 +255,8 @@ void kirjoitaTiedosto(Data *dLista, Tuotanto *tLista, char nimi[]) {
 
     printf("Tiedosto '%s' kirjoitettu.\n", nimi);
     fclose(tiedosto);
+
+    return;
 }
 
 void vapautaTuotanto(Tuotanto *tLista) {
