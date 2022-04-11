@@ -1,0 +1,50 @@
+Harjoitustyön Korjauspalautus on hylätty.
+Tarkempi arviointi:
+1.    Toiminnallisuus tehtäväksiannon mukaan ja Viopesta läpi: ok
+2.    Tiedostorakenne: useat tiedostot ja ohjeiden mukaiset alkukommentit: ok
+3.    Ohjelmarakenne: pääohjelma ja aliohjelmia: ok
+4.    Perusoperaatiot: tulostus, syöte, valintarakenne ja toistorakenne: ok
+5.    Tiedonvälitys: parametrit ja paluuarvot, globaalit muuttujat ovat kiellettyjä: EiOk
+6.    Tiedostonkäsittely: luku ja kirjoittaminen: ok
+7.    Tietorakenteet: tietue/struct, linkitetty lista: EiOk
+8.    Dynaaminen muistinhallinta: malloc, free, NULL: EiOk
+9.    Virheenkäsittely: muistin- ja tiedostonkäsittelyssä: EiOk
+10.    Makefile palautettu ja make tuottaa toimivan ohjelman: EiOk
+11.    Toteutuksen selkeys; ymmärrettävä, ylläpidettävä ja laajennettava: ok
+###################################################################
+Kommentit:
+Harjoitustyön korjaus ei ole riittävä ja työ on yhä merkittävästi kesken.
+
+5. KirjoitaTiedosto aliohjelmasta puuttuu yhä return.
+7. Luetusta datasta ei vieläkään tehdä linkitettyä listaa vaan sitä käsitellään isona pointteri taulukkona.
+8. Ohjelma vuotaa muistia useista eri kohdista, esimerkiksi anlyysissä oleva pRiviData vuotaa joka riviltä muistia. Samoin kun analysoidaan monesti niin tLista:lta jää vapauttamatta aiemmat analyysin tulokset.
+9. Kun tiedostoluetaan ja riville varataan muistia ei mallocin yhteydessä ole virheenkäsittelyä.
+10. Makefile ei tee vieläkään HT nimistä binääritiedostoa.
+###################################################################
+
+Harjoitustyön Palautus 1 on korjattava.
+Tarkempi arviointi:
+1.    Toiminnallisuus tehtäväksiannon mukaan ja Viopesta läpi: korjattava
+2.    Tiedostorakenne: useat tiedostot ja ohjeiden mukaiset alkukommentit: ok
+3.    Ohjelmarakenne: pääohjelma ja aliohjelmia: ok
+4.    Perusoperaatiot: tulostus, syöte, valintarakenne ja toistorakenne: ok
+5.    Tiedonvälitys: parametrit ja paluuarvot, globaalit muuttujat ovat kiellettyjä: korjattava
+6.    Tiedostonkäsittely: luku ja kirjoittaminen: korjattava
+7.    Tietorakenteet: tietue/struct, linkitetty lista: korjattava
+8.    Dynaaminen muistinhallinta: malloc, free, NULL: korjattava
+9.    Virheenkäsittely: muistin- ja tiedostonkäsittelyssä: ok
+10.    Makefile palautettu ja make tuottaa toimivan ohjelman: korjattava
+11.    Toteutuksen selkeys; ymmärrettävä, ylläpidettävä ja laajennettava: kesken
+###################################################################
+Kommentit:
+1. Tehtävänannon 2. osion mukaisesti kuukausianalyysi tulee toteuttaa tietuetaulukolla, ei linkitetyllä listalla.
+5. lueTiedosto, kirjoitaTiedosto, vapautaMuisti ja main aliohjelmista puuttuu return käsky lopusta.
+6. Tiedoston nimeä ei välitetä pääohjelmasta aliohjelmaan tyyliohjeen mukaisesti, vaan kysytään suoraan luku ja kirjoitusaliohjelmissa.
+6. ja 7. Luettaessa data tiedostosta on tarkoitus tehdä linkitetty lista, johon luettu data tallennetaan. Lisäksi tällä hetkellä jos luetaan ensin sahko8700.csv tiedosto ja sen jälkeen sahko15.csv tiedosto kirjoitetaan jälkimmäiseen analyysiin myös suuremman tiedoston tulokset koska luettuja arvoja ei poisteta tietorakenteesta kahden peräkkäisen lukemisen välissä.
+8. Kaikki lueTiedosto aliohjelmassa varatut muistit jäävät vapauttamatta.
+8. Tämän hetkinen vapautus aliohjelma vapauttaa vain osan varatusta muistista. Lähes kaikki ohjelman varaamat muistit jäävät vapauttamatta. Suosittelen käyttämään valgrind ohjelmaa muistivuotojen tarkistamiseen.
+10. Makefilessä ei ole alkukommentteja, katso Ohjelmointioppaasta esimerkki 7.3
+10. Makefile ei tee HT nimistä binääriä, jonka voi suorittaa komennolla ./HT
+11. Valikossa oleva switch-case rakenne ei ole tyylioppaan mukainen, tulisi olla if-else if-else rakenne.
+
+Korjaamalla yllämainitut kohdat korjauspalautukseen harjoitustyösi on hyväksytty.
