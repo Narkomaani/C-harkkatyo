@@ -48,7 +48,7 @@ typedef struct tuontanto
 
 typedef struct ldata
 {
-    char *tieto;
+    char tieto[MAX];
     struct ldata *pNext;
 } LData;
 
@@ -61,9 +61,8 @@ void tiedostonNimi(char nimi[]) {
     
     return;
 }
-
 // VUOTAA
-LData *lueTiedosto(LData lista, char nimi[]) {
+LData *lueTiedosto(LData *lista, char nimi[]) {
 
     FILE *tiedosto;
     char rivi[MAX];
@@ -72,17 +71,18 @@ LData *lueTiedosto(LData lista, char nimi[]) {
     // Tiedoston avaus ja virheenkäsittely
     if ((tiedosto = fopen(nimi, "r")) == NULL) {
         perror("Tiedoston avaaminen epäonnistui, lopetetaan");
-        exit(0);
+        exit(1);
     }
-
+    
     // Tiedoston luku
+    //fgets(rivi, sizeof(rivi), tiedosto); // luetaan otsikkorivi pois
     while (fgets(rivi, sizeof(rivi), tiedosto) != NULL) {
         if ( (pUusi = (LData*)malloc(sizeof(LData))) == NULL) {
             perror("Muistin varaus epäonnistui");
             exit(1);
         }
 
-        pUusi->tieto = rivi;
+        strcpy(pUusi->tieto, rivi);
         pUusi->pNext = NULL;
 
         if (pAlku == NULL) {
@@ -92,87 +92,103 @@ LData *lueTiedosto(LData lista, char nimi[]) {
             pLoppu->pNext = pUusi;
             pLoppu = pUusi;
         }
+
+        //printf("\nrivi: %s\nptr: %s\n", rivi, pUusi->tieto);
     }
     
     printf("Tiedosto '%s' luettu.\n", nimi);
     fclose(tiedosto);
-    return;
+    return pAlku;
 }
 // VUOTAA
-Data *analysoiData(char *lista[]) {
+Data *analysoiData(LData *lista, Data *pData) {
 
-    Data *pToinenData;
-    Data *pRiviData, *pMax = NULL, *pMin = NULL;
+    Data *pRiviData;
     char rivi[MAX];
-    int i = 1; // ensimmäinen alkio on otsikko, skip
     double summa = 0, maara; 
+    LData *ptr = lista;
 
     // Muistin varaus
-    if ((pToinenData = (Data*)malloc(sizeof(Data)*2)) == NULL) {
+    if ((pData = (Data*)malloc(sizeof(Data)*2)) == NULL) {
         perror("Muistin varaus epäonnistui");
-        exit(0);
+        exit(1);
     }
 
     // itse looppi
-    while (lista[i] != NULL) {
-
+    while (ptr->pNext != NULL) {
+        
+        //printf("looppi; %s\n", ptr->tieto);
+        
         if ((pRiviData = (Data*)malloc(sizeof(Data))) == NULL) {
             perror("Muistin varaus epäonnistui");
-            exit(0);
+            exit(1);
         }
 
-        strcpy(rivi, lista[i]);
+        strcpy(rivi, ptr->tieto);
         pRiviData->aika = strtok(rivi, ";");
         strtok(NULL,";");
         pRiviData->kulutus = atof(strtok(NULL, ";"));
 
         // Pienimmän ja isoimman mittaustuloksen loopit
-        if (pMax == NULL || pRiviData->kulutus > pMax->kulutus ) {
-            pMax = pRiviData;
-            pMax->aika = pRiviData->aika;
-            pMax->kulutus = pRiviData->kulutus;
-            pToinenData->maxKulutus = pMax->kulutus;
-            strcpy(pToinenData->maxAika, pRiviData->aika);
-            
+        if ( pRiviData->kulutus > pData->kulutus ) {
+            pData->maxKulutus = pRiviData->kulutus;
+            strcpy(pData->maxAika, pRiviData->aika);
         }
-        if ( pMin == NULL || pRiviData->kulutus < pMin->kulutus ) {
-            pMin = pRiviData;
-            pToinenData->minKulutus = pMin->kulutus;
-            strcpy(pToinenData->minAika, pMin->aika);
-
+        if ( pRiviData->kulutus < pData->kulutus ) {
+            pData->minKulutus = pRiviData->kulutus;
+            strcpy(pData->minAika, pRiviData->aika);
         }
 
         summa += (int)pRiviData->kulutus;
-        i++;
+        maara += 1.0;
+        ptr = ptr->pNext;
+        free(pRiviData);
     }
 
-    maara = i-1;
+    pData->maara = (double)maara;
+    pData->summa = (double)summa;
+    pData->keskiarvo = ((double)summa/(double)maara);
 
-    pToinenData->maara = (double)maara;
-    pToinenData->summa = (double)summa;
-    pToinenData->keskiarvo = ((double)summa/(double)maara);
+    printf("Analysoitu %.0f mittaustulosta.\n", pData->maara);
+    printf("Kokonaiskulutus oli yhteensä %.0f kWh.\n", pData->summa);
 
-    printf("Analysoitu %.0f mittaustulosta.\n", pToinenData->maara);
-    printf("Kokonaiskulutus oli yhteensä %.0f kWh.\n", pToinenData->summa);
-
-    return pToinenData;
+    return pData;
 }
 // VUOTAA
-Tuotanto *analysoiKK(char *lista[]) {
+Tuotanto *analysoiKK(LData *lista, Tuotanto *pAlku) {
     
-    Tuotanto *pAlku = NULL, *pLoppu = NULL;
-    Tuotanto *pUusi;
-    int i = 1, kuukausi = 0;
+    Tuotanto *pLoppu = NULL, *pUusi;
+    int i = 1, kuukausi = 0, intLista[12];
     double kulutus;
     char rivi[255];
+    LData *ptr = lista;
 
+    while (ptr->pNext != NULL) {
+        kulutus = 0;
+        strcpy(rivi, ptr->tieto);
+        strtok(rivi,".");
+        kuukausi = atoi(strtok(NULL,"."));
+        strtok(NULL,";"); // Loput kuukaudesta
+        strtok(NULL,";"); // viikko
+        strtok(NULL,";"); // Kulutus
+        kulutus = atof(strtok(NULL,";"));
+        kulutus = kulutus + atof(strtok(NULL,";"));
+        kulutus = kulutus + atof(strtok(NULL,";"));
+        kulutus = kulutus + atof(strtok(NULL,";"));
+        kulutus = kulutus + atof(strtok(NULL,";"));
+        kulutus = kulutus + atof(strtok(NULL,";"));
+
+        intLista[kuukausi-1] += kulutus;
+    }
+
+    /*
     while (kuukausi < 13) {
         
 
         // Rivin kopiointi ja pilkkominen muuttujiin
-        if (lista[i] != NULL) {
+        if (ptr->pNext != NULL) {
             kulutus = 0;
-            strcpy(rivi, lista[i]);
+            strcpy(rivi, ptr->tieto);
             strtok(rivi,".");
             kuukausi = atoi(strtok(NULL,"."));
             strtok(NULL,";"); // Loput kuukaudesta
@@ -219,12 +235,15 @@ Tuotanto *analysoiKK(char *lista[]) {
                 pLoppu = pUusi;
                 kuukausi = pUusi->kuukausi;
             }
-        }
 
-        
-    }
+            ptr = ptr->pNext;
+        }
+    } */
 
     printf("Kuukausittaiset tuotannot analysoitu.\n");
+    for (int i = 0; i<sizeof(intLista); i++) {
+        printf("index %d: %d", i, intLista[i]);
+    }
     return pAlku;
 }
 
@@ -286,9 +305,18 @@ void vapautaTuotanto(Tuotanto *tLista) {
     return;
 }
 
-void vapautaMuisti(char *lista[]) {
-    for (int i=0; i < sizeof(lista);i++) {
-        free(lista[i]);
+void vapautaMuisti(LData *lista) {
+    
+    if (lista == NULL) {
+        return;
+    }
+
+    LData *ptr = lista;
+    while (ptr->pNext != NULL)
+    {
+        lista = ptr->pNext;
+        free(ptr);
+        ptr = lista;
     }
 
     return;

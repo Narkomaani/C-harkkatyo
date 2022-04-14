@@ -23,12 +23,12 @@ typedef struct data Data;
 typedef struct ldata LData;
 
 void tiedostonNimi(char nimi[]);
-LData *lueTiedosto(LData lista, char nimi[]);
-Tuotanto *analysoiKK(char *lista[]);
-Data *analysoiData(char *lista[]);
+LData *lueTiedosto(LData *lista, char nimi[]);
+Data *analysoiData(LData *lista, Data *pToinenData);
+Tuotanto *analysoiKK(LData *lista, Tuotanto *pAlku);
 void kirjoitaTiedosto(Data *dLista, Tuotanto *tLista, char nimi[]);
 void vapautaTuotanto(Tuotanto *tLista);
-void vapautaMuisti(char *lista[]);
+void vapautaMuisti(LData *lista);
 
 
 #endif

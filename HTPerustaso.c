@@ -37,7 +37,7 @@ int valikko() {
 
 int main(int argc, char *argv[]) {
     int valinta = -1;
-    char *lista[10000], nimiTiedosto[50];
+    char nimiTiedosto[50] = "\0";
     LData *lista = NULL;
     Data *data = NULL;
     Tuotanto *tLista = NULL;
@@ -57,8 +57,12 @@ int main(int argc, char *argv[]) {
             if (lista == NULL) {
                 printf("Ei analysoitavaa, lue tiedosto ennen analyysiä.\n");
             } else {
-                data = analysoiData(lista);
-                tLista = analysoiKK(lista);
+                vapautaMuisti(lista);
+                vapautaTuotanto(tLista);
+                free(data);
+                
+                data = analysoiData(lista, data);
+                tLista = analysoiKK(lista, tLista);
             }
         }
 
