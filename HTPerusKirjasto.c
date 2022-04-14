@@ -182,7 +182,7 @@ double *analysoiKK(LData *lista, double kkData[]) {
         kulutus = kulutus + atof(strtok(NULL,";"));
 
         kkData[kuukausi-1] += kulutus;
-        // printf("\nkuukausi: %d \nKulutus: %d\n", kuukausi, (int)kulutus);
+        printf("\nkuukausi: %d \nKulutus: %d\n", kuukausi, (int)kulutus);
         ptr = ptr->pNext;
     }
 
