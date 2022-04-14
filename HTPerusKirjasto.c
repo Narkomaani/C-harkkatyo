@@ -188,12 +188,12 @@ void analysoiKK(LData *lista, double kkData[]) {
 
 
     printf("Kuukausittaiset tuotannot analysoitu.\n");
-    printf("%f\n", kkData[0]);
+    // printf("%f\n", kkData[0]);
     return kkData;
 }
 
 void kirjoitaTiedosto(Data *dLista, double kkData[], char nimi[]) {
-    printf("%f\n", kkData[0]);
+    // printf("%f\n", kkData[0]);
     // for (int i = 0; i < 12; i++) {
     //     printf("kk: %d  kulutus: %.0f\n", i, kkData[i]);
     // }
