@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
                 printf("Ei analysoitavaa, lue tiedosto ennen analyysiä.\n");
             } else {
                 data = analysoiData(lista, data);
-                *kkData = analysoiKK(lista, kkData);
+                analysoiKK(lista, kkData);
             }
         }
 

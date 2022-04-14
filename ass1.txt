@@ -4,7 +4,7 @@ Suurin kulutus, 12718885 kWh, tapahtui 28.02.2020 08:00.
 Pienin kulutus, 5620157 kWh, tapahtui 20.06.2020 03:00.
 
 Pvm;Tuotanto (GWh)
-Kk 1;0.00
+Kk 1;6597.31
 Kk 2;6081.62
 Kk 3;6589.79
 Kk 4;5654.71

@@ -22,7 +22,7 @@
 // #define ASIZE(x)  (sizeof(x) / sizeof((x)[0])) // miksei toimi :D
 
 // Maximun amount of lines
-#define MAX 1000000
+#define MAX 10000
 
 
 typedef struct data 
@@ -153,7 +153,7 @@ Data *analysoiData(LData *lista, Data *pData) {
     return pData;
 }
 
-double *analysoiKK(LData *lista, double kkData[]) {
+void analysoiKK(LData *lista, double kkData[]) {
     int kuukausi = 0;
     double kulutus;
     char rivi[255];

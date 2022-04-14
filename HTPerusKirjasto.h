@@ -25,7 +25,7 @@ typedef struct ldata LData;
 void tiedostonNimi(char nimi[]);
 LData *lueTiedosto(LData *lista, char nimi[]);
 Data *analysoiData(LData *lista, Data *pToinenData);
-double *analysoiKK(LData *lista, double kkData[]);
+void analysoiKK(LData *lista, double kkData[]);
 void kirjoitaTiedosto(Data *dLista, double kkData[], char nimi[]);
 void vapautaMuisti(LData *lista);
 
