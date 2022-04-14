@@ -42,8 +42,7 @@ int main(int argc, char *argv[]) {
     Data *data = NULL;
     double *kkData[12];
 
-    do
-    {
+    do {
         valinta = valikko();
 
         if ( valinta == 1) {
