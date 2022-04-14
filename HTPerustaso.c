@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
     char nimiTiedosto[50] = "\0";
     LData *lista = NULL;
     Data *data = NULL;
-    Tuotanto *tLista = NULL;
+    double *kkData[12];
 
     do
     {
@@ -57,22 +57,18 @@ int main(int argc, char *argv[]) {
             if (lista == NULL) {
                 printf("Ei analysoitavaa, lue tiedosto ennen analyysiä.\n");
             } else {
-                vapautaMuisti(lista);
-                vapautaTuotanto(tLista);
-                free(data);
-                
                 data = analysoiData(lista, data);
-                tLista = analysoiKK(lista, tLista);
+                *kkData = analysoiKK(lista, kkData);
             }
         }
 
         else if ( valinta == 3 ) {
-            if (data == NULL || tLista == NULL) {
+            if (data == NULL) {
                 printf("Ei kirjoitettavia tietoja, analysoi tiedot ennen tallennusta.\n");
             } else {
                 printf("Anna kirjoitettavan tiedoston nimi: ");
                 scanf("%s", nimiTiedosto);
-                kirjoitaTiedosto(data, tLista, nimiTiedosto);
+                kirjoitaTiedosto(data, kkData, nimiTiedosto);
             }
         }
 
@@ -90,7 +86,6 @@ int main(int argc, char *argv[]) {
     } while (valinta != 0);
     
     vapautaMuisti(lista);
-    vapautaTuotanto(tLista);
     free(data);
 
     printf("\nKiitos ohjelman käytöstä.\n");

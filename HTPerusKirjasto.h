@@ -17,17 +17,16 @@
 #ifndef Kirjasto_h
 #define Kirjasto_h
 
-// typedef struct data DATA;
-typedef struct tuotanto Tuotanto;
+
 typedef struct data Data;
 typedef struct ldata LData;
+
 
 void tiedostonNimi(char nimi[]);
 LData *lueTiedosto(LData *lista, char nimi[]);
 Data *analysoiData(LData *lista, Data *pToinenData);
-Tuotanto *analysoiKK(LData *lista, Tuotanto *pAlku);
-void kirjoitaTiedosto(Data *dLista, Tuotanto *tLista, char nimi[]);
-void vapautaTuotanto(Tuotanto *tLista);
+double *analysoiKK(LData *lista, double kkData[]);
+void kirjoitaTiedosto(Data *dLista, double kkData[], char nimi[]);
 void vapautaMuisti(LData *lista);
 
 
