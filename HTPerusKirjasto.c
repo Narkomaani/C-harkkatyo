@@ -45,8 +45,6 @@ typedef struct ldata
     char tieto[MAX];
     struct ldata *pNext;
 } LData;
-
-
 void tiedostonNimi(char nimi[]) {
 
     /* Tiedoston nimen kysyminen */
@@ -55,7 +53,7 @@ void tiedostonNimi(char nimi[]) {
     
     return;
 }
-// VUOTAA
+
 LData *lueTiedosto(LData *lista, char nimi[]) {
 
     FILE *tiedosto;
@@ -90,12 +88,13 @@ LData *lueTiedosto(LData *lista, char nimi[]) {
 
         // printf("\nrivi: %s\nptr: %s\n", rivi, pUusi->tieto);
     }
-    
     printf("Tiedosto '%s' luettu.\n", nimi);
     fclose(tiedosto);
+    free(pUusi);
+    
     return pAlku;
 }
-// VUOTAA
+
 Data *analysoiData(LData *lista, Data *pData) {
 
     Data *pRiviData;
@@ -114,7 +113,7 @@ Data *analysoiData(LData *lista, Data *pData) {
     // itse looppi
     while (ptr != NULL) {
         
-        printf("looppi; %s", ptr->tieto);
+        // printf("looppi; %s", ptr->tieto);
         
         if ((pRiviData = (Data*)malloc(sizeof(Data))) == NULL) {
             perror("Muistin varaus epäonnistui");
@@ -130,12 +129,12 @@ Data *analysoiData(LData *lista, Data *pData) {
         if ( pRiviData->kulutus > pData->maxKulutus || pData->maxKulutus == 0.0 ) {
             pData->maxKulutus = pRiviData->kulutus;
             strcpy(pData->maxAika, pRiviData->aika);
-            printf("isoin kulutus at %s: %d\n", pData->maxAika, pData->maxKulutus);
+            // printf("isoin kulutus at %s: %d\n", pData->maxAika, pData->maxKulutus);
         }
         if ( pRiviData->kulutus < pData->minKulutus || pData->minKulutus == 0.0 ) {
             pData->minKulutus = pRiviData->kulutus;
             strcpy(pData->minAika, pRiviData->aika);
-            printf("pienin kulutus at %s: %d\n", pData->minAika, pData->minKulutus);
+            // printf("pienin kulutus at %s: %d\n", pData->minAika, pData->minKulutus);
         }
 
         summa += (int)pRiviData->kulutus;
@@ -153,7 +152,7 @@ Data *analysoiData(LData *lista, Data *pData) {
 
     return pData;
 }
-// VUOTAA
+
 double *analysoiKK(LData *lista, double kkData[]) {
     int kuukausi = 0;
     double kulutus;
@@ -164,7 +163,7 @@ double *analysoiKK(LData *lista, double kkData[]) {
         kkData[i] = 0;
     }
 
-    while (ptr->pNext != NULL) {
+    while (ptr != NULL) {
         kulutus = 0.0;
         kuukausi = 0;
 
@@ -181,17 +180,23 @@ double *analysoiKK(LData *lista, double kkData[]) {
         kulutus = kulutus + atof(strtok(NULL,";"));
         kulutus = kulutus + atof(strtok(NULL,";"));
 
-        kkData[kuukausi-1] += kulutus;
-        printf("\nkuukausi: %d \nKulutus: %d\n", kuukausi, (int)kulutus);
+        kkData[(kuukausi-1)] += kulutus;
+        // printf("\nkuukausi: %d \nKulutus: %d\n", kuukausi, (int)kulutus);
+        // printf("kkKulutus: %.0f\n",kkData[kuukausi-1]);
         ptr = ptr->pNext;
     }
 
 
     printf("Kuukausittaiset tuotannot analysoitu.\n");
+    printf("%f\n", kkData[0]);
     return kkData;
 }
 
 void kirjoitaTiedosto(Data *dLista, double kkData[], char nimi[]) {
+    printf("%f\n", kkData[0]);
+    // for (int i = 0; i < 12; i++) {
+    //     printf("kk: %d  kulutus: %.0f\n", i, kkData[i]);
+    // }
 
     FILE *tiedosto;
     double offset = 1, maara; // jostain syystä normi määrän arvot ei ole oikein viopessa
@@ -223,7 +228,7 @@ void kirjoitaTiedosto(Data *dLista, double kkData[], char nimi[]) {
     for (int i=0; i < 12; i++) {
         maara = kkData[i]/(double)1000000;
         maara = maara*offset;
-        fprintf("Kk %d;%.2f\n", i+1, maara);
+        fprintf(tiedosto, "Kk %d;%.2f\n", i+1, maara);
     }
 
     printf("Tiedosto '%s' kirjoitettu.\n", nimi);
