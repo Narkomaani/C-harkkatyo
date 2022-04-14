@@ -20,9 +20,10 @@
 // typedef struct data DATA;
 typedef struct tuotanto Tuotanto;
 typedef struct data Data;
+typedef struct ldata LData;
 
 void tiedostonNimi(char nimi[]);
-void lueTiedosto(char *lista[], char nimi[]);
+LData *lueTiedosto(LData lista, char nimi[]);
 Tuotanto *analysoiKK(char *lista[]);
 Data *analysoiData(char *lista[]);
 void kirjoitaTiedosto(Data *dLista, Tuotanto *tLista, char nimi[]);

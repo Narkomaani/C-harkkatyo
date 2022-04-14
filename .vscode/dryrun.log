@@ -1,0 +1,7 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/jerew/Coding/c-harkkatyo/C-harkkatyo'
+gcc HTPerustaso.c -c -std=c99 -Wall -pedantic
+gcc HTPerusKirjasto.c -c -std=c99 -Wall -pedantic
+gcc HTPerustaso.o HTPerusKirjasto.o -o HT
+make: Leaving directory '/home/jerew/Coding/c-harkkatyo/C-harkkatyo'
+ 

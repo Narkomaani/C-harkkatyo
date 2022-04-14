@@ -46,6 +46,13 @@ typedef struct tuontanto
     struct tuontanto *pNext;
 } Tuotanto;
 
+typedef struct ldata
+{
+    char *tieto;
+    struct ldata *pNext;
+} LData;
+
+
 void tiedostonNimi(char nimi[]) {
 
     /* Tiedoston nimen kysyminen */
@@ -55,11 +62,12 @@ void tiedostonNimi(char nimi[]) {
     return;
 }
 
-void lueTiedosto(char *sPtr[], char nimi[]) {
+// VUOTAA
+LData *lueTiedosto(LData lista, char nimi[]) {
 
     FILE *tiedosto;
-    char rivi[255];
-    int i = 0;
+    char rivi[MAX];
+    LData *pAlku = NULL, *pLoppu = NULL, *pUusi = NULL;
 
     // Tiedoston avaus ja virheenkäsittely
     if ((tiedosto = fopen(nimi, "r")) == NULL) {
@@ -69,21 +77,28 @@ void lueTiedosto(char *sPtr[], char nimi[]) {
 
     // Tiedoston luku
     while (fgets(rivi, sizeof(rivi), tiedosto) != NULL) {
-        if ( (sPtr[i] = malloc(sizeof(rivi)+1)) == NULL ) {
+        if ( (pUusi = (LData*)malloc(sizeof(LData))) == NULL) {
             perror("Muistin varaus epäonnistui");
-            exit(0);
+            exit(1);
         }
-        
-        strcpy(sPtr[i], rivi);
-        i++;
-        
+
+        pUusi->tieto = rivi;
+        pUusi->pNext = NULL;
+
+        if (pAlku == NULL) {
+            pAlku = pUusi;
+            pLoppu = pUusi;
+        } else {
+            pLoppu->pNext = pUusi;
+            pLoppu = pUusi;
+        }
     }
     
     printf("Tiedosto '%s' luettu.\n", nimi);
     fclose(tiedosto);
     return;
 }
-
+// VUOTAA
 Data *analysoiData(char *lista[]) {
 
     Data *pToinenData;
@@ -142,7 +157,7 @@ Data *analysoiData(char *lista[]) {
 
     return pToinenData;
 }
-
+// VUOTAA
 Tuotanto *analysoiKK(char *lista[]) {
     
     Tuotanto *pAlku = NULL, *pLoppu = NULL;
